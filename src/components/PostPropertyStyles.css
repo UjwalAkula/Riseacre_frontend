@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+/* Set the base font size using vw for responsiveness */
+html {
+  font-size:1vw; /* This will set the base font size based on the viewport width */
+}
+
+.postPropery-container{
+  font-family: "Roboto", serif;
+  font-style: normal;
+  border:0.1rem solid red;
+  display:flex;
+}
+
+.our-ad{
+  width:25%;
+  font-family: "Ubuntu", sans-serif;
+}
+
+.steps-section{
+  width:100%;
+}
+/*------------------------------------------------------ListingStep_1---------------------------------------------------------------------------*/
+
+.propertyBasics-section{
+  font-family: "Roboto", serif;
+  width:100%;
+  border:0.1rem solid black;
+  padding:0rem 1rem 0rem 1rem;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.propertyBasics-section h3{
+  color:#055CB4;
+
+}
+
+.dropdowns{
+  width:15rem;
+  height:2rem;
+  text-align: center;
+  outline:none;
+  border:0.1rem solid #eaeaea;
+}
+
+.form-details{
+  border:0.1rem solid green;
+  width:50rem;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap:1rem;
+}

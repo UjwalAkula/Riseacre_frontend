@@ -1,0 +1,307 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+*{
+  font-family: "Roboto", serif;
+  font-style: normal;
+}
+
+body { 
+  margin: 0; 
+}
+
+/* LANDING PAGE */
+
+.landing-section{
+  width:100%;
+}
+.main-section{
+  height:auto;
+  width:100%;
+}
+
+/* OTP-BASED-AUTHENTICATION */
+.title{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #055CB4;
+  border-radius:2px;
+  max-height:40px;
+  width:150px;
+  background-color: #055CB4;
+  color: white;
+  font-weight: 500;
+}
+.LoginSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-weight: 500;
+}
+
+.LoginBox {
+  border:2px solid #055CB4;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width:25%;
+  width:25%;
+  height:65%;
+  border-radius: 8px;
+  position: relative;
+}
+
+.LoginBox p{
+  margin-bottom:60px;
+  text-decoration: underline;
+  text-decoration-color:#a5a5a5 ;
+  font-size: smaller;
+  /*color: rgb(70, 70, 70);*/
+  color: #2e6397;
+}
+
+.LoginBox form{
+  /*border: 1px solid blue;*/
+  width:80%;
+  position: relative;
+}
+
+.phoneNumbersection{
+  width: 100%;
+}
+
+.sendotpbtn{
+  position: absolute;
+  right:0;
+  color:#04c380;
+  font-size: smaller;
+  margin-top:2px;
+  cursor: pointer;
+}
+
+.otpsection {
+  /*border: 1px solid red;*/
+  width: 100%; /* Full width for the form sections */
+  margin-top:35px;
+  margin-bottom:35px; /* Add spacing between sections */
+}
+
+.phoneNumbersection input,
+.otpsection input{
+  border:none;
+  border-bottom:2px solid #055CB4;
+  outline: none;
+  width:100%;
+  height: 30px;
+}
+
+.phoneNumbersection label,
+.otpsection label{
+  color: #055CB4;
+  font-size:x-small;
+  font-weight: 100;
+}
+
+.no-flag-phone-input {
+  --PhoneInputCountryFlag-height: 0;
+  --PhoneInputCountryFlag-borderColor: transparent;
+}
+
+.submitbutton{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height:35px;
+  width:100%;
+  margin-top:60px;
+}
+
+.submitbutton button{
+  height:100%;
+  background-color: #04c380;
+  color:white;
+  width:100%;
+  border: #00E091;
+  border-radius:2px;
+  font-size:medium;
+  cursor: pointer;
+}
+
+/* Email/Password-Authentication */
+
+.signup-section{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  height:100vh;
+  font-weight: 500;
+}
+
+.signup-box{
+  border:2px solid #2e6397;
+  border-radius: 5px;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width:25%;
+  height:80%;
+}
+
+.signup-header{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #055CB4;
+  border-radius:2px;
+  max-height:40px;
+  width:150px;
+  background-color: #055CB4;
+  color: white;
+  margin-top: 35px;
+}
+
+.signup-box p{
+  margin-bottom:50px;
+  text-decoration: underline;
+  text-decoration-color:#a5a5a5 ;
+  font-size: smaller;
+  /*color: rgb(70, 70, 70);*/
+  color: #2e6397;
+}
+
+.signup-box form{
+  width:80%;
+  margin-bottom:40px;
+}
+
+
+.sup-attri{
+  /*border:1px solid red;*/
+  margin-bottom:35px;
+}
+
+.sup-attri label{
+  color: #055CB4;
+  font-size:x-small;
+  font-weight:500;
+}
+
+.sup-attri input{
+  border:none;
+  outline: none;
+  width:100%;
+  border-bottom:2px solid #055CB4;
+  height:25px;
+}
+
+.submit-button{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  width:100%;
+  margin-top: 15px;
+}
+
+.submit-button button{
+  width:100%;
+  height:30px;
+  border:1px solid rgb(14, 199, 64);
+  border-radius: 2px;
+  background-color: #04c380;
+  color:white;
+  cursor: pointer;
+  font-size: medium;
+}
+
+/* SIGNIN SECTION */
+
+.signin-section{
+  width:100%;
+  height:100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+}
+
+.signin-header{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #055CB4;
+  border-radius:2px;
+  max-height:40px;
+  width:150px;
+  background-color: #0F52BA;
+  color: white;
+}
+
+.signin-box{
+  width:25%;
+  height:70%;
+  border:2px solid #055CB4;
+  border-radius:5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.signin-box form{
+  width:80%;
+}
+
+.signin-box p{
+  margin-bottom:50px;
+  text-decoration: underline;
+  text-decoration-color:#a5a5a5 ;
+  font-size: smaller;
+  /*color: rgb(70, 70, 70);*/
+  color: #2e6397;
+}
+
+.signin-box span{
+  padding:30px;
+  color:#2e6397;
+}
+
+.sin-attri{
+  width:100%;
+  margin-bottom:35px;
+}
+
+.sin-attri label{
+  color: #055CB4;
+  font-size:x-small;
+  font-weight:500;
+}
+
+.sin-attri input{
+  border:none;
+  outline: none;
+  width:100%;
+  border-bottom:2px solid #055CB4;
+  height:25px;
+}
+
+.google-login-btn{
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+  background-color:#1a73e8;
+  color:white;
+  width:80%;
+  height:30px;
+  border:2px solid #1a73e8;
+  border-radius: 2px;
+  position: relative;
+  cursor: pointer;
+}
+
+.gicon{
+  position: absolute;
+  left:50px;
+}
+

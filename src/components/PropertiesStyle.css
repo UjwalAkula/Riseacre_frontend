@@ -1,0 +1,235 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+/* Set the base font size using vw for responsiveness */
+html {
+  font-size:1vw; /* This will set the base font size based on the viewport width */
+}
+
+.properties-page{
+  width:100vw;
+  background-color: #f5f5f5;
+  min-height:100%;
+}
+
+.properties-container{
+  font-family: "Roboto", serif;
+  font-style: normal;
+  font-size: 0.5rem; /* Inheriting the root font size */
+  height: auto;
+  width: 100%;
+  background-color: #f5f5f5;
+  /*background-color: #f6fafc;*/
+}
+
+.properties-section{
+  height: auto;
+  width: 60%;
+  margin-left: 8%;
+}
+
+.property-card{
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+  border:1.5px solid #f0f0f0;
+  border-radius: 10px;
+  width: 100%;
+  height: 19vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2vh;
+  background-color: #ffffff;
+  color: #333333;
+  position: relative;
+}
+
+.property-card:hover{
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  cursor: pointer;
+}
+
+.property-images{
+  /*height: 17.1vw;*/
+  height:90%;
+  width: 50%;
+  border-radius: 10px;
+  margin-left: 15px;
+  border: 1px solid #bfbfbf;
+  position: relative;
+}
+
+.property-image{
+  /*height: 17.1vw;*/
+  height:100%;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.left-arrow{
+  border:0.1rem solid #9eccfd;
+  border-radius:0.1rem;
+  z-index:10;
+  position: absolute;
+  top:50%;
+  left:0.5rem;
+  height:1.5rem;
+  width:1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.886);
+}
+
+.right-arrow{
+  border:0.1rem solid #9eccfd;
+  border-radius:0.1rem;
+  z-index:10;
+  position: absolute;
+  top:50%;
+  right:0.5rem;
+  height:1.5rem;
+  width:1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.886);  
+}
+
+.property-content{
+  width: 100%;
+  height: 17.1vw;
+  padding-left: 2%;
+  margin-right: 1%;
+  font-weight: normal;
+  position: relative;
+}
+
+.property-details{
+  display: flex;
+  align-items: center;
+  padding-top: 0.475vh;
+  padding-top: 1vw;
+  padding-bottom: 1vw;
+}
+
+.detail-item{
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 20%;
+}
+
+.detail-item span{
+  font-size:0.6rem; /* Adjusting font size with rem */
+  font-weight: bold;
+}
+
+.builder-info{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1% 1% 1% 0%;
+}
+
+.contact-buttons{
+  display: flex;
+  gap: 20px;
+  width: 45%;
+}
+
+.contact-buttons button {
+  width: 50%;
+  height: 1.9vw; 
+  background-color: #055CB4;
+  color: white;
+  border-radius: 3px;
+  border:0.1rem solid #055CB4;
+  cursor: pointer;
+  font-size:1rem;
+  padding: 0.25rem; 
+  transition: all 0.3s ease; 
+}
+
+.card-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #333333;
+  padding-right: 1%;
+  overflow-x:hidden;
+}
+
+.save-share{
+  display: flex;
+  flex-direction: row-reverse;
+  padding-right: 1%;
+  gap: 15px;
+  height:1vw;
+}
+
+/*------------------------------------------------------ Responsive typography for headings ------------------------------------------------*/
+h3 {
+  font-size:1.5rem;
+}
+
+.card-header h3 {
+  font-weight: 700;
+  font-size:1.2rem;
+}
+
+.card-header span{
+  font-size:0.75rem;
+}
+
+.property-details .detail-item strong {
+  font-size:1rem;
+}
+
+.property-details .price-details span, 
+.property-details .carpet-area span, 
+.property-details .configuration span,
+.property-details .construction-type span {
+  font-size:1.2rem;
+}
+
+.property-content span{
+  font-size:1rem;
+}
+
+.property-content p {
+  font-size:1rem; 
+}
+
+.builder-info span {
+  font-weight:900;
+  font-size:1rem; 
+}
+
+.contact-buttons{
+  font-size:1rem;
+}
+
+.link{
+  text-decoration: none;
+}
+/*------------------------------------------------------ Responsive for all devices ---------------------------------------------------------*/
+
+/* Extra Small Devices (Mobile Phones - Portrait) */
+@media (max-width: 599px) { }
+
+/* Small Devices (Mobile Phones - Landscape) */
+@media (min-width: 600px) and (max-width: 767px) {
+
+ }
+
+/* Medium Devices (Tablets - Portrait) */
+@media (min-width: 768px) and (max-width: 1023px) { }
+
+/* Large Devices (Tablets - Landscape / Small Laptops) */
+@media (min-width: 1024px) and (max-width: 1279px) { }
+
+/* Extra Large Devices (Laptops / Desktops) */
+@media (min-width: 1280px) and (max-width: 1919px) { }
+
+/* Ultra Large Devices (Wide Screens / Large Desktop Monitors) */
+@media (min-width: 1920px) { }
