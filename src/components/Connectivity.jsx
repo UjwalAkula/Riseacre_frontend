@@ -15,7 +15,7 @@ const Connectivity = ({ property }) => {
           {property.locality}, {property.city}, {property.state}, {property.PINcode}.
         </div>
       </div>
-      <div className="connectivity property-highlights">
+      <div className="connectivity-container ">
         <div className="location-item highlight-item">
           <div className="icon-div">
             <FontAwesomeIcon icon={faSubway} size="lg" style={{ color: "#055CB4" }} />

@@ -3,8 +3,17 @@ import PhoneInput from 'react-phone-number-input';
 import { auth } from '../Thirdparty/Firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { API_URL } from '../../data/Apipath';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { handleshowAuth } from '../../../Redux/AppSlice';
 
 const UserSignUp = () => {
+
+  const dispatch=useDispatch();
+
+  const {showAuth}=useSelector((state)=>state.app);
+
   const [userName, setUserName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [userEmail, setUserEmail] = useState('');
@@ -48,6 +57,7 @@ const UserSignUp = () => {
         setUserEmail('');
         setPassword('');
         setErrorMessage('');
+        dispatch(handleshowAuth(showAuth));
         console.log('User registered:', data);
       } else {
         // Show error message from backend
@@ -64,6 +74,7 @@ const UserSignUp = () => {
   return (
     <div className="signup-section">
       <div className="signup-box">
+        <FontAwesomeIcon  className='close-auth-btn' icon={faXmark} size="xl" style={{color: "#7d7c7c",}} onClick={()=> dispatch(handleshowAuth(showAuth))} />
         <div className="signup-header">
           <h2>RiseAcre.in</h2>
         </div>

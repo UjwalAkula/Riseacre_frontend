@@ -5,8 +5,15 @@ import ReactDOM from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { API_URL } from '../../data/Apipath'; // Make sure to set your backend API URL here
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { handleshowAuth,handleShowSignUp,handleLoggedIn } from '../../../Redux/AppSlice';
 
 const UserSignIn = () => {
+
+  const dispatch=useDispatch();
+  const {showAuth,showSignUp,loggedIn}=useSelector((state)=>state.app);
+
   const [userEmail, setUserEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false); // Loading state to show during API call
@@ -42,7 +49,10 @@ const UserSignIn = () => {
         setPassword('');
         // Successfully authenticated, handle the response (store user, redirect, etc.)
         console.log('Backend Response:', data);
+        localStorage.setItem('userId',data.userId);
         localStorage.setItem('userToken', JSON.stringify(data.token)); // Store user in localStorage
+        dispatch(handleLoggedIn(false));
+        dispatch(handleshowAuth(true));
       } else {
         // Handle backend error (e.g., token verification failure)
         setErrorMessage(data.message || 'Failed to sign in');
@@ -83,7 +93,10 @@ const UserSignIn = () => {
       if (response.ok) {
         // Successfully authenticated, handle the response (store user, redirect, etc.)
         console.log('Backend Response:', data);
+        localStorage.setItem('userId',data.userId);
         localStorage.setItem('userToken', JSON.stringify(data.token)); // Store user in localStorage
+        dispatch(handleLoggedIn(false));
+        dispatch(handleshowAuth(true));
       } else {
         // Handle backend error (e.g., token verification failure)
         setErrorMessage(data.message || 'Failed to sign in');
@@ -99,6 +112,7 @@ const UserSignIn = () => {
   return (
     <div className="signin-section">
       <div className="signin-box">
+        <FontAwesomeIcon  className='close-auth-btn' icon={faXmark} size="xl" style={{color: "#7d7c7c",}} onClick={()=> dispatch(handleshowAuth(showAuth))} />
         <div className="signin-header">
           <h2>RiseAcre.in</h2>
         </div>
@@ -139,13 +153,15 @@ const UserSignIn = () => {
 
         {errorMessage && <div className="error-message">{errorMessage}</div>} {/* Show error message */}
 
-        <span>________ <sub>or</sub>_________</span>
+        <span className='or-line'>________ <sub>or</sub>_________</span>
 
         {/* Google Sign-In Button */}
         <button onClick={handlesigninwithgoogle} className="google-login-btn" disabled={loading}>
           <FontAwesomeIcon icon={faGoogle} size="lg" style={{ color: "white" }} className='gicon' />
           {loading ? 'Signing In...' : 'SignIn with Google'}
         </button>
+
+        <span className='sign-up-link'><span>New to Riseacre ? </span><b onClick={()=> dispatch(handleShowSignUp(showSignUp))}>SignUp</b></span>
       </div>
     </div>
   );

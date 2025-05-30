@@ -7,7 +7,7 @@ html {
 }
 
 .properties-page{
-  width:100vw;
+  width:100%;
   background-color: #f5f5f5;
   min-height:100%;
 }
@@ -17,7 +17,6 @@ html {
   font-style: normal;
   font-size: 0.5rem; /* Inheriting the root font size */
   height: auto;
-  width: 100%;
   background-color: #f5f5f5;
   /*background-color: #f6fafc;*/
 }
@@ -50,8 +49,8 @@ html {
 
 .property-images{
   /*height: 17.1vw;*/
-  height:90%;
-  width: 50%;
+  height:17rem;
+  width: 15rem;
   border-radius: 10px;
   margin-left: 15px;
   border: 1px solid #bfbfbf;
@@ -211,6 +210,25 @@ h3 {
 
 .link{
   text-decoration: none;
+}
+
+.phone-section{
+  border:0.1rem solid #dadada;
+  font-size: 1rem;
+  padding:1rem;
+  border-radius:0.2rem;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+  background-color: white;
+  position:absolute;
+  bottom:0rem;
+  width:12rem;
+}
+
+.phone-section h3{
+  font-size: 1.2rem;
+  color: #424242;
+  font-weight: 600;
+  margin-top: 0.5rem;
 }
 /*------------------------------------------------------ Responsive for all devices ---------------------------------------------------------*/
 

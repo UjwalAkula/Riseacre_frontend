@@ -1,6 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
+/* Set the base font size using vw for responsiveness */
+html {
+  font-size:1vw; /* This will set the base font size based on the viewport width */
+}
+
 *{
   font-family: "Roboto", serif;
   font-style: normal;
@@ -138,34 +143,41 @@ body {
   align-items: center;
   height:100vh;
   font-weight: 500;
+  font-size: 1rem;
 }
 
 .signup-box{
-  border:2px solid #2e6397;
-  border-radius: 5px;
+  /*border:2px solid #2e6397;*/
   display:flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width:25%;
-  height:80%;
+  height:38rem;
+  background-color: white;
+  font-size: 1rem;
+  position: relative;
 }
 
 .signup-header{
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #055CB4;
-  border-radius:2px;
-  max-height:40px;
-  width:150px;
+  border:0.1rem solid #055CB4;
+  border-radius:0.1rem;
+  max-height:3rem;
+  width:12rem;
   background-color: #055CB4;
   color: white;
-  margin-top: 35px;
+  margin-top:2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
 }
 
 .signup-box p{
-  margin-bottom:50px;
+  margin-bottom:3rem;
   text-decoration: underline;
   text-decoration-color:#a5a5a5 ;
   font-size: smaller;
@@ -181,7 +193,7 @@ body {
 
 .sup-attri{
   /*border:1px solid red;*/
-  margin-bottom:35px;
+  margin-bottom:2rem;
 }
 
 .sup-attri label{
@@ -194,8 +206,8 @@ body {
   border:none;
   outline: none;
   width:100%;
-  border-bottom:2px solid #055CB4;
-  height:25px;
+  border-bottom:0.15rem solid #055CB4;
+  height:1.5rem;
 }
 
 .submit-button{
@@ -203,18 +215,19 @@ body {
   justify-content: center;
   align-items: center;
   width:100%;
-  margin-top: 15px;
+  margin-top:2rem;
 }
 
 .submit-button button{
   width:100%;
-  height:30px;
+  height:2rem;
   border:1px solid rgb(14, 199, 64);
   border-radius: 2px;
   background-color: #04c380;
   color:white;
   cursor: pointer;
-  font-size: medium;
+  font-size:1rem;
+  margin-top:1rem;
 }
 
 /* SIGNIN SECTION */
@@ -226,29 +239,36 @@ body {
   justify-content: center;
   align-items: center;
   font-weight: 500;
+  font-size: 1rem;
 }
 
 .signin-header{
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #055CB4;
+  border: 0.1rem solid #055CB4;
   border-radius:2px;
-  max-height:40px;
-  width:150px;
+  max-height:3rem;
+  width:12rem;
   background-color: #0F52BA;
   color: white;
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .signin-box{
   width:25%;
-  height:70%;
-  border:2px solid #055CB4;
-  border-radius:5px;
+  height:35rem;
+  /*border:0.15rem solid #055CB4;*/
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: white;
+  padding-top:0.5rem;
+  position: relative;
 }
 
 .signin-box form{
@@ -256,7 +276,7 @@ body {
 }
 
 .signin-box p{
-  margin-bottom:50px;
+  margin-bottom:3rem;
   text-decoration: underline;
   text-decoration-color:#a5a5a5 ;
   font-size: smaller;
@@ -264,14 +284,14 @@ body {
   color: #2e6397;
 }
 
-.signin-box span{
-  padding:30px;
+.or-line{
+  padding:1.5rem;
   color:#2e6397;
 }
 
 .sin-attri{
   width:100%;
-  margin-bottom:35px;
+  margin-bottom:2rem;
 }
 
 .sin-attri label{
@@ -284,8 +304,13 @@ body {
   border:none;
   outline: none;
   width:100%;
-  border-bottom:2px solid #055CB4;
-  height:25px;
+  border-bottom:0.15rem solid #055CB4;
+  height:2rem;
+}
+
+.submit-button{
+  margin-top:1rem;
+  font-size:1rem;
 }
 
 .google-login-btn{
@@ -293,15 +318,60 @@ body {
   background-color:#1a73e8;
   color:white;
   width:80%;
-  height:30px;
-  border:2px solid #1a73e8;
-  border-radius: 2px;
+  height:2rem;
+  border:0.1rem solid #1a73e8;
+  border-radius:0.15rem;
   position: relative;
   cursor: pointer;
+  font-size:1rem;
 }
 
 .gicon{
   position: absolute;
-  left:50px;
+  left:3rem;
 }
 
+.sign-up-link{
+  padding-top:1rem;
+}
+.sign-up-link span{
+  color:#ec2a2abd;
+}
+.sign-up-link b{
+  color:#055CB4;
+  cursor: pointer;
+}
+
+.close-auth-btn{
+  z-index:10;
+  position:absolute;
+  top:0.7rem;
+  right:0.7rem;
+  cursor: pointer;
+}
+
+/*-----------------------------------------------User-Page-------------------------------------------------------------------------*/
+
+.user-page{
+  width:100%;
+  height:100vh;
+  background-color: #35353530;
+  backdrop-filter: blur(10px);
+  z-index:10005;
+  position: fixed;
+  top:0;
+  right:0;
+}
+
+/*------------------------------------------ Authentication-page -----------------------------------------------------------------*/
+
+.auth-container{
+  width:100%;
+  height:100vh;
+  background-color: #35353530;
+  backdrop-filter: blur(10px);
+  z-index:10007;
+  position: fixed;
+  top:0;
+  left:0;
+}

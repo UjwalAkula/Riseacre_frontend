@@ -39,6 +39,8 @@ const UserLogin = () => {
         setPhoneNumber('');
         setOtp('');
         setError('');
+        localStorage.setItem('userId',data.userId);
+        localStorage.setItem('token',data.token);
         console.log('User logged in successfully:', data);
       } else {
         setError(data.message || 'Something went wrong');

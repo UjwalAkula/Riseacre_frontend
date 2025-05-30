@@ -64,14 +64,16 @@ html {
   font-size:1rem;
 }
 
-.btn-section{
+.btn-container{
   display:flex;
   align-items: flex-end;
   gap:2rem;
   padding-bottom:1rem;
+  /*border:0.1rem solid green;*/
+  position:relative;
 }
 
-.btn-section button {
+.btn-container button {
   width:8rem;
   height: 1.9vw; 
   background-color: #055CB4;
@@ -201,6 +203,18 @@ html {
   font-size:2rem;
 }
 
+.connectivity-container{
+ /*border:0.1rem solid red;*/
+ width:100%;
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ grid-template-rows: repeat(1fr);
+ justify-items: center;
+ align-items: center;
+ grid-row-gap:2rem;
+ padding:2rem 0rem 2rem 0rem;
+}
+
 .AmenitiesGrid{
   display:grid;
   grid-template-columns:repeat(5,1fr);
@@ -295,4 +309,29 @@ html {
   color:#424242;
   font-weight:600;
   font-size: 1.1rem;
+}
+
+.vp-section{
+
+  border:0.1rem solid #dadada;
+  font-size: 1rem;
+  padding:1rem;
+  border-radius:0.2rem;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+  background-color: white;
+  position:absolute;
+
+}
+
+.vp-section h3{
+  font-size:1rem;
+  font-weight:600;
+  margin-top:2rem;
+}
+
+.cross-btn{
+  position:absolute;
+  top:0.5rem;
+  left:0.5rem;
+  cursor: pointer;
 }

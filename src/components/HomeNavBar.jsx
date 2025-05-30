@@ -1,14 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './HomeStyle.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUser ,faKey} from '@fortawesome/free-solid-svg-icons';
 import { API_URL } from '../data/Apipath'; // Ensure API_URL is properly set
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPurpose, setCategory, setPropertyType } from '../../Redux/FiltersSlice';
 import { setSearchString } from '../../Redux/SearchSlice';
+import { handleShowUser } from '../../Redux/AppSlice';
 
 const HomeNavBar = () => {
+
+  const {showUser,showAuth}=useSelector((state)=>state.app);
+
   const [navbtnactive, setNavbtnactive] = useState('Buy');
   const [placePredictions, setPlacePredictions] = useState([]);
   const timeoutIdRef = useRef(null); // Using useRef for timeout ID
@@ -81,10 +85,22 @@ const HomeNavBar = () => {
               <b>Post property</b> <div className="free-label">FREE</div>
             </div>
           </Link>
-          <div className="user">
+          <div className="user" onClick={()=>dispatch(handleShowUser(showUser))}>
             <FontAwesomeIcon icon={faUser} size="lg" style={{ color: "white" }} />
           </div>
         </div>
+      </div>
+
+      <div className="image-left-home">
+        <img src='/house2-img.png' alt='house' />
+      </div>
+
+      <div className="nav-description">
+        Affordable Connections , Endless Possibilities , Rise with Riseacre.
+      </div>
+
+      <div className="image-right-home">
+        <img src='/house-image.png' alt='house' />
       </div>
 
       <div className="search-section">
@@ -128,7 +144,7 @@ const HomeNavBar = () => {
             type="text"
             className="search-bar"
             name="search"
-            placeholder="Search"
+            placeholder="Search Properties by Locality or Address"
             value={searchString}
             onChange={handleSearch}
             aria-label="Search properties"

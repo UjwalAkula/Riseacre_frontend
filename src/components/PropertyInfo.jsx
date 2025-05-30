@@ -5,12 +5,21 @@ import './PropertyStyle.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck,faAngleLeft,faAngleRight,faPhone} from '@fortawesome/free-solid-svg-icons';
 import PropertyHighlights from './PropertyHighlights';
-import Connectivity from './connectivity';
+import Connectivity from './Connectivity';
 import Amenities from './Amenities';
 import ListerandEngage from './ListerandEngage';
 import PropertiesNavBar from './PropertiesNavBar';
+import { useLocation } from 'react-router-dom';
+import UserActivity from './UserActivity';
+import { useSelector } from 'react-redux';
+import Authentication from './Authentication';
+import Viewphone from './Viewphone';
 
 const PropertyInfo = () => {
+
+  const {showUser,showAuth}=useSelector((state)=>state.app);
+  const page_location=useLocation();
+
   const [property, setProperty] = useState(null);
   const [error, setError] = useState(null);
   const [count,setCount]=useState(0);
@@ -19,6 +28,7 @@ const PropertyInfo = () => {
   const [amenitiesFeatures, setAmenitiesFeatures] = useState(false);
   const [listerEngagement, setListerEngagement] = useState(false);
   const [activeSection, setActiveSection] = useState("propertyHighlight");
+  const [showphone, setShowphone] = useState(false);
 
 
 
@@ -119,8 +129,15 @@ const PropertyInfo = () => {
   }
 
 
+  const isPropertyInfoPage=page_location.pathname===`/propertyinfo/${propertyId}`;
+
+
   return (
     <div className='property-page'>
+      {showAuth && isPropertyInfoPage && <Authentication/>}
+      { showUser && isPropertyInfoPage &&<div className="user-page">
+        <UserActivity/>
+      </div>}
       <PropertiesNavBar/>
       <div className='property-info-container'>
       <div className="property-section">
@@ -135,8 +152,9 @@ const PropertyInfo = () => {
               {property.propertyType  && property.purpose && <p>{property.propertyType} for {property.purpose}</p>}
               {property.category && property.constructionType && <p>{property.category} | {property.constructionType}</p>}
             </div>
-            <div className="btn-section">
-              <button style={{backgroundColor:'white',color:'#055CB4'}}><b>View Phone</b></button>
+            <div className="btn-container">
+              <button style={{backgroundColor:'white',color:'#055CB4'}} onClick={()=>{setShowphone(true)}}><b>View Phone</b></button>
+              { showphone && <Viewphone property={property} setShowphone={setShowphone}/>}
               <button><FontAwesomeIcon icon={faPhone} size='sm' style={{color: "white",}} />  <b>Contact</b></button>
             </div>
           </div>
