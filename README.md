@@ -23,18 +23,13 @@ This repository contains the **Riseacre Frontend**, the user interface for the R
   * **Vite** (for development and build)
   * **JavaScript**
   * **CSS**
-  * **Firebase** (for third-party integrations, e.g., image storage)
+  * **Firebase** (for third-party integrations)
 
 -----
 
 ## Getting Started
 
 Follow these steps to run the frontend locally.
-
-### Prerequisites
-
-  * **Node.js** (LTS recommended)
-  * **npm**
 
 ### Installation
 
@@ -53,7 +48,7 @@ Follow these steps to run the frontend locally.
 To start the development server:
 
 ```bash
-npm start
+npm run dev
 ```
 
 The application will be accessible at `http://localhost:5173` (or another port if 5173 is in use).
