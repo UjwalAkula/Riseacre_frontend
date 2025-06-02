@@ -26,3 +26,5 @@ dist-ssr
 #apis keys
 src/components/Thirdparty/
 
+# env file
+.env
