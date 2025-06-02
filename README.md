@@ -1,8 +1,75 @@
-# React + Vite
+Here's the minimal, necessary information for your Riseacre Frontend README:
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+-----
 
-Currently, two official plugins are available:
+# RISEACRE\_FRONTEND
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The intuitive user interface for the Riseacre property platform.
+
+[Live Demo: https://riseacre.vercel.app/](https://riseacre.vercel.app/)
+
+-----
+
+## Overview
+
+This repository contains the **Riseacre Frontend**, the user interface for the Riseacre platform. Built with **React** and **Redux Toolkit**, it provides features for property Browse, listing, user authentication, and more. Note: It's currently optimized for desktop and **not responsive on mobile**.
+
+-----
+
+## Technologies Used
+
+  * **React**
+  * **Redux Toolkit**
+  * **Vite** (for development and build)
+  * **JavaScript**
+  * **CSS**
+  * **Firebase** (for third-party integrations, e.g., image storage)
+
+-----
+
+## Getting Started
+
+Follow these steps to run the frontend locally.
+
+### Prerequisites
+
+  * **Node.js** (LTS recommended)
+  * **npm**
+
+### Installation
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/UjwalAkula/Riseacre_frontend
+    cd Riseacre_frontend
+    ```
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+### Usage
+
+To start the development server:
+
+```bash
+npm start
+```
+
+The application will be accessible at `http://localhost:5173` (or another port if 5173 is in use).
+
+-----
+
+## 🚀 Deployment
+
+The Riseacre Frontend is deployed live on **Vercel**.
+
+  * **Live Frontend URL:** [https://riseacre.vercel.app/](https://riseacre.vercel.app/)
+
+-----
+
+## 💡 Inspiration
+
+This project was conceived to address the common challenges and needs within the online real estate market, aiming to provide a streamlined solution for property listing and discovery.
+
+---
