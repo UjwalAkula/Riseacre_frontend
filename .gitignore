@@ -23,8 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
-#apis keys
-src/components/Thirdparty/
+
 
 # env file
 .env
