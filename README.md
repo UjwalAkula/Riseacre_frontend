@@ -1,5 +1,3 @@
-Here's the minimal, necessary information for your Riseacre Frontend README:
-
 -----
 
 # RISEACRE\_FRONTEND
