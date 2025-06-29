@@ -19,7 +19,7 @@ The application is fully responsive, offering a seamless experience across both 
 * **Redux Toolkit**
 * **Vite** (for development and build)
 * **JavaScript**
-* **CSS**
+* **Tailwind CSS**
 * **Firebase** (for third-party integrations)
 
 ---
