@@ -9,8 +9,8 @@ The intuitive user interface for the Riseacre property platform.
 
 ## Overview
 
-This repository contains the **Riseacre Frontend**, the user interface for the Riseacre platform. Built with **React** and **Redux Toolkit**, it provides features for property Browse, listing, user authentication, and more. Note: It's currently optimized for desktop and **not responsive on mobile**.
-
+This repository contains the Riseacre Frontend, the user interface for the Riseacre platform. Built with React and Redux Toolkit, it provides features for property browsing, listing, user authentication, and more.
+The application is fully responsive, offering a seamless experience across both desktop and mobile devices.
 ---
 
 ## Technologies Used
