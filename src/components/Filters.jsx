@@ -1,327 +1,194 @@
 import React, { useState } from 'react';
-import './PropertiesNavBarStyle.css';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  setPurpose,
   setCategory,
   setPropertyType,
   setStatus,
   setBhkType,
-  setPrice,
-  setBuildUpArea,
-  clearFilters
-} from '../../Redux/FiltersSlice'; // Import Redux actions
+  clearFilters,
+} from '../../Redux/FiltersSlice';
 
 const Filters = () => {
   const dispatch = useDispatch();
-  let {
-    purpose,
-    category,
-    propertyType,
-    status,
-    bhkType,
-    price,
-    buildUpArea
-  } = useSelector((state) => state.filters); // Get filter values from Redux
+  const { category, propertyType, status, bhkType } = useSelector((state) => state.filters);
 
-  // Local state to manage active button and display states
   const [activebtn, setActivebtn] = useState('');
-  const [categorydisplay, setCategorydisplay] = useState(false);
-  const [propertytypedisplay, setPropertytypedisplay] = useState(false);
-  const [statusdisplay, setStatusdisplay] = useState(false);
-  const [pricedisplay, setPricedisplay] = useState(false);
-  const [bhkdisplay, setBhkdisplay] = useState(false);
-  const [buildupareadisplay, setBuildupareadisplay] = useState(false);
+  const [dropdown, setDropdown] = useState('');
+  const [showFilters, setShowFilters] = useState(false); // mobile toggle
 
-  const handleCategory = () => {
-    if (categorydisplay) {
-      setCategorydisplay(false);
-      setActivebtn('');
-    } else {
-      setCategorydisplay(true);
-      setActivebtn('category');
-      setPropertytypedisplay(false);
-      setStatusdisplay(false);
-      setPricedisplay(false);
-      setBhkdisplay(false);
-      setBuildupareadisplay(false);
-    }
+  const handleDropdown = (key) => {
+    setDropdown(dropdown === key ? '' : key);
+    setActivebtn(activebtn === key ? '' : key);
   };
-  
-  const handlePropertyType = () => {
-    if (propertytypedisplay) {
-      setPropertytypedisplay(false);
-      setActivebtn('');
-    } else {
-      setPropertytypedisplay(true);
-      setActivebtn('propertytype');
-      setCategorydisplay(false);
-      setStatusdisplay(false);
-      setPricedisplay(false);
-      setBhkdisplay(false);
-      setBuildupareadisplay(false);
-    }
-  };
-  
-  const handleStatus = () => {
-    if (statusdisplay) {
-      setStatusdisplay(false);
-      setActivebtn('');
-    } else {
-      setStatusdisplay(true);
-      setActivebtn('status');
-      setCategorydisplay(false);
-      setPropertytypedisplay(false);
-      setPricedisplay(false);
-      setBhkdisplay(false);
-      setBuildupareadisplay(false);
-    }
-  };
-  
-  const handlePrice = () => {
-    if (pricedisplay) {
-      setPricedisplay(false);
-      setActivebtn('');
-    } else {
-      setPricedisplay(true);
-      setActivebtn('price');
-      setCategorydisplay(false);
-      setPropertytypedisplay(false);
-      setStatusdisplay(false);
-      setBhkdisplay(false);
-      setBuildupareadisplay(false);
-    }
-  };
-  
-  const handleBhkType = () => {
-    if (bhkdisplay) {
-      setBhkdisplay(false);
-      setActivebtn('');
-    } else {
-      setBhkdisplay(true);
-      setActivebtn('bhktype');
-      setCategorydisplay(false);
-      setPropertytypedisplay(false);
-      setStatusdisplay(false);
-      setPricedisplay(false);
-      setBuildupareadisplay(false);
-    }
-  };
-  
-  const handleBuildUpArea = () => {
-    if (buildupareadisplay) {
-      setBuildupareadisplay(false);
-      setActivebtn('');
-    } else {
-      setBuildupareadisplay(true);
-      setActivebtn('builduparea');
-      setCategorydisplay(false);
-      setPropertytypedisplay(false);
-      setStatusdisplay(false);
-      setPricedisplay(false);
-      setBhkdisplay(false);
-    }
-  };
-  
-  
 
-  const handleClearFilters = () => {
-    dispatch(clearFilters()); // Clear all filters
+  const getDropdownPositionClass = (key, index) => {
+    // Desktop positioning (unchanged)
+    const desktopPositions = {
+      category: 'left-0',
+      propertyType: 'left-[8.5rem]',
+      status: 'left-[18rem]',
+      bhkType: 'left-[27rem]'
+    };
+
+    // Mobile/tablet positioning - stack vertically or use responsive positioning
+    const mobilePositions = {
+      category: 'left-0',
+      propertyType: 'left-0 sm:left-[8.5rem]',
+      status: 'left-0 sm:left-[18rem]',
+      bhkType: 'left-0 sm:left-[27rem]'
+    };
+
+    return `${mobilePositions[key]} lg:${desktopPositions[key]}`;
   };
 
   return (
-    <div className="filters-section">
-      <div className="filter-box">
-        <div
-          className={`filter-btn category-btn ${activebtn === 'category' ? 'active' : ''}`}
-          onClick={handleCategory}
+    <div className="w-full bg-white shadow-xs px-4 mt-6 md:!mt-16 relative py-2 border rounded-sm">
+      
+      {/* Header Row: Filters title + toggle */}
+      <div className="md:hidden flex items-center justify-between mb-2 md:mb-0">
+        <h2 className="text-3xl md:text-base font-semibold text-blue-800">Filters</h2>
+        <button
+          className=" text-blue-600 border border-blue-600 px-3 py-1 rounded text-bold text-3xl md:text-sm"
+          onClick={() => setShowFilters(!showFilters)}
         >
-          Category
-        </div>
-        <div
-          className={`filter-btn propertytype-btn ${activebtn === 'propertytype' ? 'active' : ''}`}
-          onClick={handlePropertyType}
-        >
-          Property Type
-        </div>
-        <div
-          className={`filter-btn status-btn ${activebtn === 'status' ? 'active' : ''}`}
-          onClick={handleStatus}
-        >
-          Status
-        </div>
-        <div
-          className={`filter-btn price-btn ${activebtn === 'price' ? 'active' : ''}`}
-          onClick={handlePrice}
-        >
-          Price
-        </div>
-        <div
-          className={`filter-btn bhktype-btn ${activebtn === 'bhktype' ? 'active' : ''}`}
-          onClick={handleBhkType}
-        >
-          BHK Type
-        </div>
-        <div
-          className={`filter-btn builduparea-btn ${activebtn === 'builduparea' ? 'active' : ''}`}
-          onClick={handleBuildUpArea}
-        >
-          Build-up-Area
-        </div>
-        <div
-          className={`filter-btn clearfilter-btn ${activebtn === 'builduparea' ? '' : ''}`}
-          onClick={handleClearFilters} // Clear filters when clicked
-        >
-          Clear Filters
-        </div>
+          {showFilters ? 'Hide Filters' : 'Show Filters'}
+        </button>
       </div>
 
-      {/* Render filter options based on the active button */}
-      {categorydisplay && (
-        <div className="category-card">
-          <div
-            className={`category-in-btn ${category === 'Residential' ? 'active-in-btn' : ''}`}
-            onClick={() => dispatch(setCategory('Residential'))}
+      {/* Filter buttons (responsive) */}
+      <div className={`${showFilters ? 'flex' : 'hidden'} md:flex flex-wrap gap-2 py-3`}>
+        {[
+          { label: 'Category', key: 'category' },
+          { label: 'Property Type', key: 'propertyType' },
+          { label: 'Status', key: 'status' },
+          { label: 'BHK Type', key: 'bhkType' },
+        ].map(({ label, key }) => (
+          <button
+            key={key}
+            className={`w-full md:w-40 max-h-10 border rounded px-3 py-1 text-md font-bold transition ${
+              activebtn === key
+                ? 'text-blue-700 bg-blue-50 border-blue-700'
+                : 'text-gray-600 border-gray-400'
+            }`}
+            onClick={() => handleDropdown(key)}
           >
-            Residential
-          </div>
-          <div
-            className={`category-in-btn ${category === 'Commercial' ? 'active-in-btn' : ''}`}
-            onClick={() => dispatch(setCategory('Commercial'))}
-          >
-            Commercial
-          </div>
-        </div>
-      )}
+            {label}
+          </button>
+        ))}
 
-      {propertytypedisplay && (
-        <div className="propertytype-card">
-          <div
-            className={`property-in-btn ${propertyType === 'Flat/Apartment' ? 'active-in-btn' : ''}`}
-            onClick={() => dispatch(setPropertyType('Flat/Apartment'))}
-          >
-            Flat/Apartment
-          </div>
-          <div
-            className={`property-in-btn ${propertyType === 'Independent House/Villa' ? 'active-in-btn' : ''}`}
-            onClick={() => dispatch(setPropertyType('Independent House/Villa'))}
-          >
-            Independent House/Villa
-          </div>
-          <div
-            className={`property-in-btn ${propertyType === 'Plot/Land' ? 'active-in-btn' : ''}`}
-            onClick={() => dispatch(setPropertyType('Plot/Land'))}
-          >
-            Plot/Land
-          </div>
-          <div
-            className={`property-in-btn ${propertyType === 'Farmhouse' ? 'active-in-btn' : ''}`}
-            onClick={() => dispatch(setPropertyType('Farmhouse'))}
-          >
-            Farmhouse
-          </div>
-          <div
-            className={`property-in-btn ${propertyType === 'Office' ? 'active-in-btn' : ''}`}
-            onClick={() => dispatch(setPropertyType('Office'))}
-          >
-            Office
-          </div>
-          <div
-            className={`property-in-btn ${propertyType === 'Retail/Shop' ? 'active-in-btn' : ''}`}
-            onClick={() => dispatch(setPropertyType('Retail/Shop'))}
-          >
-            Retail/Shop
-          </div>
-          <div
-            className={`property-in-btn ${propertyType === 'Storage/Warehouse' ? 'active-in-btn' : ''}`}
-            onClick={() => dispatch(setPropertyType('Storage/Warehouse'))}
-          >
-            Storage/Warehouse
-          </div>
-          <div
-            className={`property-in-btn ${propertyType === 'Industry/Factory' ? 'active-in-btn' : ''}`}
-            onClick={() => dispatch(setPropertyType('Industry/Factory'))}
-          >
-            Industry/Factory
-          </div>
-          <div
-            className={`property-in-btn ${propertyType === 'Hospitality' ? 'active-in-btn' : ''}`}
-            onClick={() => dispatch(setPropertyType('Hospitality'))}
-          >
-            Hospitality
-          </div>
-          <div
-            className={`property-in-btn ${propertyType === 'Others' ? 'active-in-btn' : ''}`}
-            onClick={() => dispatch(setPropertyType('Others'))}
-          >
-            Others
-          </div>
-        </div>
-      )}
+        <button
+          className="w-full md:w-32 border border-red-500 text-red-500 hover:bg-red-50 rounded px-3 py-1 text-sm font-medium"
+          onClick={() => {
+            dispatch(clearFilters());
+            setActivebtn('');
+            setDropdown('');
+          }}
+        >
+          Clear Filters
+        </button>
+      </div>
 
-      {statusdisplay && (
-        <div className="status-card">
-          <div
-            className={`status-in-btn ${status === 'Ready to Move' ? 'active-in-btn' : ''}`}
-            onClick={() => dispatch(setStatus('Ready to Move'))}
-          >
-            Ready to Move
+      {/* Dropdowns */}
+      <div className="absolute top-full left-4 mt-2 z-50 space-y-4">
+        {dropdown === 'category' && (
+          <div className="absolute left-0 flex flex-col gap-2 p-3 border rounded bg-white shadow w-full md:w-52 max-w-sm">
+            {['Residential', 'Commercial'].map((type) => (
+              <button
+                key={type}
+                onClick={() => {
+                  dispatch(setCategory(type));
+                  setDropdown('');
+                  setActivebtn('');
+                }}
+                className={`rounded-full px-4 py-1 border text-sm ${
+                  category === type
+                    ? 'bg-blue-50 text-blue-700 border-blue-700'
+                    : 'text-gray-600 border-gray-400'
+                }`}
+              >
+                {type}
+              </button>
+            ))}
           </div>
-          <div
-            className={`status-in-btn ${status === 'Under Construction' ? 'active-in-btn' : ''}`}
-            onClick={() => dispatch(setStatus('Under Construction'))}
-          >
-            Under Construction
-          </div>
-        </div>
-      )}
+        )}
 
-      {bhkdisplay && (
-        <div className="bhk-card">
-          <div
-            className={`bhk-in-btn ${bhkType === 'Studio' ? 'active-in-btn' : ''}`}
-            onClick={() => dispatch(setBhkType('Studio'))}
-          >
-            Studio
+        {dropdown === 'propertyType' && (
+          <div className="absolute left-0 md:left-[8.5rem] flex flex-col gap-2 p-3 border rounded bg-white shadow w-full md:w-64 max-w-sm">
+            {[
+              'Flat/Apartment',
+              'Independent House/Villa',
+              'Plot/Land',
+              'Farmhouse',
+              'Office',
+              'Retail/Shop',
+              'Storage/Warehouse',
+              'Industry/Factory',
+              'Hospitality',
+              'Others',
+            ].map((type) => (
+              <button
+                key={type}
+                onClick={() => {
+                  dispatch(setPropertyType(type));
+                  setDropdown('');
+                  setActivebtn('');
+                }}
+                className={`rounded-full px-4 py-1 border text-sm ${
+                  propertyType === type
+                    ? 'bg-blue-50 text-blue-700 border-blue-700'
+                    : 'text-gray-600 border-gray-400'
+                }`}
+              >
+                {type}
+              </button>
+            ))}
           </div>
-          <div
-            className={`bhk-in-btn ${bhkType === '1BHK' ? 'active-in-btn' : ''}`}
-            onClick={() => dispatch(setBhkType('1BHK'))}
-          >
-            1BHK
+        )}
+
+        {dropdown === 'status' && (
+          <div className="absolute left-0 md:left-[18rem] flex flex-col gap-2 p-3 border rounded bg-white shadow w-full md:w-52 max-w-sm">
+            {['Ready to Move', 'Under Construction'].map((type) => (
+              <button
+                key={type}
+                onClick={() => {
+                  dispatch(setStatus(type));
+                  setDropdown('');
+                  setActivebtn('');
+                }}
+                className={`rounded-full px-4 py-1 border text-sm ${
+                  status === type
+                    ? 'bg-blue-50 text-blue-700 border-blue-700'
+                    : 'text-gray-600 border-gray-400'
+                }`}
+              >
+                {type}
+              </button>
+            ))}
           </div>
-          <div
-            className={`bhk-in-btn ${bhkType === '2BHK' ? 'active-in-btn' : ''}`}
-            onClick={() => dispatch(setBhkType('2BHK'))}
-          >
-            2BHK
+        )}
+
+        {dropdown === 'bhkType' && (
+          <div className="absolute left-0 md:left-[27rem] flex flex-col gap-2 p-3 border rounded bg-white shadow w-full md:w-52 max-w-sm">
+            {['Studio', '1BHK', '2BHK', '3BHK', '4BHK', '5BHK', 'Penthouse'].map((type) => (
+              <button
+                key={type}
+                onClick={() => {
+                  dispatch(setBhkType(type));
+                  setDropdown('');
+                  setActivebtn('');
+                }}
+                className={`rounded-full px-4 py-1 border text-sm ${
+                  bhkType === type
+                    ? 'bg-blue-50 text-blue-700 border-blue-700'
+                    : 'text-gray-600 border-gray-400'
+                }`}
+              >
+                {type}
+              </button>
+            ))}
           </div>
-          <div
-            className={`bhk-in-btn ${bhkType === '3BHK' ? 'active-in-btn' : ''}`}
-            onClick={() => dispatch(setBhkType('3BHK'))}
-          >
-            3BHK
-          </div>
-          <div
-            className={`bhk-in-btn ${bhkType === '4BHK' ? 'active-in-btn' : ''}`}
-            onClick={() => dispatch(setBhkType('4BHK'))}
-          >
-            4BHK
-          </div>
-          <div
-            className={`bhk-in-btn ${bhkType === '5BHK' ? 'active-in-btn' : ''}`}
-            onClick={() => dispatch(setBhkType('5BHK'))}
-          >
-            5BHK
-          </div>
-          <div
-            className={`bhk-in-btn ${bhkType === 'Penthouse' ? 'active-in-btn' : ''}`}
-            onClick={() => dispatch(setBhkType('Penthouse'))}
-          >
-            Penthouse
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

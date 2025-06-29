@@ -1,41 +1,70 @@
 import React from 'react';
-import './PropertyStyle.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faSwimmingPool, faDumbbell, faParking, faElevator, faWifi, faBolt, 
-  faFan, faSun, faShieldAlt, faVideoCamera, faFireExtinguisher, faTint, 
-  faPhoneAlt, faPaw, faBuilding, faChild, faCloudRain, faCogs, faRunning, 
-  faLeaf, faStore, faUniversity, faUsers, faBriefcase, faHotTub, faBell, 
-  faSolarPanel, faUtensils, faBox, faBed, faUsersCog, faTableTennis, 
-  faBasketballBall, faBicycle, faHelicopter, faMapMarkerAlt, faLandmark, 
-  faSoap, faExclamationTriangle, faGasPump, faFire, faHamburger, faHome,
-  faTree, faTshirt, faBook  // Added icons for Park, Laundry Service, and Library
-} from '@fortawesome/free-solid-svg-icons'; 
+import {
+  faSwimmingPool,
+  faDumbbell,
+  faTree,
+  faParking,
+  faElevator,
+  faBolt,
+  faFan,
+  faSun,
+  faTint,
+  faPhoneAlt,
+  faPaw,
+  faBuilding,
+  faCogs,
+  faBed,
+  faTshirt,
+  faUtensils,
+  faBox,
+  faStore,
+  faUniversity,
+  faBriefcase,
+  faUsersCog,
+  faTableTennis,
+  faBasketballBall,
+  faRunning,
+  faChild,
+  faShieldAlt,
+  faVideoCamera,
+  faFireExtinguisher,
+  faExclamationTriangle,
+  faHome,
+  faSolarPanel,
+  faCloudRain,
+  faGasPump,
+  faLandmark,
+  faHotTub,
+  faFire,
+  faBook,
+  faWifi,
+} from '@fortawesome/free-solid-svg-icons';
 
 const amenityIcons = {
   'Swimming Pool': faSwimmingPool,
-  'Gym': faDumbbell,
-  'Park': faTree, // Updated icon
-  'Parking': faParking,
-  'Lift': faElevator, // Added icon for Lift
+  Gym: faDumbbell,
+  Park: faTree,
+  Parking: faParking,
+  Lift: faElevator,
   'Power Backup': faBolt,
   'Air Conditioning': faFan,
   'Central Heating': faSun,
   'Water Supply': faTint,
-  'Intercom': faPhoneAlt,
+  Intercom: faPhoneAlt,
   'Pet-Friendly': faPaw,
-  'Clubhouse': faBuilding,
+  Clubhouse: faBuilding,
   'Banquet Hall': faCogs,
   'Community Hall': faUsersCog,
   'Guest Room': faBed,
-  'Laundry Service': faTshirt, // Updated icon
+  'Laundry Service': faTshirt,
   'Modular Kitchen': faUtensils,
   'Walk-in Closet': faBox,
   'Retail Shops': faStore,
-  'ATM': faUniversity,
+  ATM: faUniversity,
   'Business Center': faBriefcase,
   'Conference Room': faBuilding,
-  'Multi-Purpose Hall': faUsers,
+  'Multi-Purpose Hall': faUsersCog,
   'Tennis Court': faTableTennis,
   'Basketball Court': faBasketballBall,
   'Jogging Track': faRunning,
@@ -49,25 +78,29 @@ const amenityIcons = {
   'Rain Water Harvesting': faCloudRain,
   'Gas Pipeline': faGasPump,
   'Vastu Compliant': faLandmark,
-  'Sauna': faHotTub,
+  Sauna: faHotTub,
   'Barbecue Area': faFire,
-  'Library': faBook, // Added icon for Library
-  'Terrace Garden': faLeaf,
-  'Cycling Track': faBicycle,
-  'Helipad': faHelicopter
+  Library: faBook,
+  'Terrace Garden': faTree,
+  'Cycling Track': faRunning,
+  Helipad: faLandmark,
+  Wifi: faWifi,
 };
 
 const Amenities = ({ property }) => {
+  const list = Array.isArray(property?.amenities) ? property.amenities : [];
+
   return (
-    <div className="AmenitiesGrid">
-      {property.amenities.map((item, index) => (
-        <div className="feature" key={index}>
-          <div className="feature-icon">
-            {amenityIcons[item] && <FontAwesomeIcon icon={amenityIcons[item]} size="2xl" style={{ color: "#858585" }} />}
-          </div>
-          <div className="amenity-name">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4 p-3 sm:p-6 bg-white rounded-lg shadow">
+      {list.map((item, idx) => (
+        <div key={`${item}-${idx}`} className="flex flex-col items-center p-2 sm:p-4 border rounded-md min-h-[80px] sm:min-h-[100px]">
+          <FontAwesomeIcon 
+            icon={amenityIcons[item] || faHome} 
+            className="text-gray-600 text-lg sm:text-2xl mb-1 sm:mb-2 flex-shrink-0" 
+          />
+          <span className="text-xs sm:text-sm font-medium text-gray-700 text-center leading-tight">
             {item}
-          </div>
+          </span>
         </div>
       ))}
     </div>

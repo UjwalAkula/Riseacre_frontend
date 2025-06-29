@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import './PropertiesStyle.css';
 import { API_URL } from '../data/Apipath';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faPhone, faBookmark, faShare, faAngleLeft, faAngleRight, faXmark } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCheck,
+  faPhone,
+  faBookmark,
+  faShare,
+  faXmark,
+  faUser,
+} from '@fortawesome/free-solid-svg-icons';
 import { Link, useLocation } from 'react-router-dom';
 import PropertiesNavBar from './PropertiesNavBar';
 import Filters from './Filters';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSearchString } from '../../Redux/SearchSlice';
+import { handleShowUser } from '../../Redux/AppSlice';
 import UserActivity from './UserActivity';
 import Authentication from './Authentication';
 
@@ -17,15 +24,12 @@ const Properties = () => {
 
   const { searchString } = useSelector((state) => state.search);
   const { showUser, showAuth } = useSelector((state) => state.app);
-
   const {
     purpose,
     category,
     propertyType,
     status,
     bhkType,
-    price,
-    buildUpArea,
   } = useSelector((state) => state.filters);
 
   const [properties, setProperties] = useState([]);
@@ -33,13 +37,12 @@ const Properties = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [searchInput, setSearchInput] = useState(searchString);
-  const [showphoneId, setShowphoneId] = useState(null); // Per property control
+  const [showphoneId, setShowphoneId] = useState(null);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       dispatch(setSearchString(searchInput));
     }, 500);
-
     return () => clearTimeout(timeoutId);
   }, [searchInput, dispatch]);
 
@@ -63,146 +66,202 @@ const Properties = () => {
     getProperties();
   }, []);
 
-  const renderBuilderCertifications = (certifications) => {
-    if (certifications && certifications !== 'NA') {
-      return (
-        <span className="certificate" style={{ color: '#28A745' }}>
-          <FontAwesomeIcon icon={faCheck} size="lg" style={{ color: '#218838' }} /> {certifications}
-        </span>
-      );
-    }
-    return null;
-  };
-
   const filteredProperties = properties.filter((item) => {
     const fullAddress = `${item.nearbyLandmarks}, ${item.locality}, ${item.city}, ${item.state}, India`.toLowerCase();
-    const searchingLocationParts = searchInput.split(',').map((part) => part.trim().toLowerCase());
-
-    const doesMatch = searchingLocationParts.every((part) => fullAddress.includes(part));
-    const matchesPurpose = purpose === '' || item.purpose === purpose;
-    const matchesCategory = category === '' || item.category === category;
-    const matchesPropertyType = propertyType === '' || item.propertyType === propertyType;
-    const matchesStatus = status === '' || item.constructionType === status;
-    const matchesBhkType = bhkType === '' || item.bhkConfiguration.includes(bhkType);
-
-    return doesMatch && matchesPurpose && matchesCategory && matchesPropertyType && matchesStatus && matchesBhkType;
+    const searchParts = searchInput.split(',').map((part) => part.trim().toLowerCase());
+    const matchesAddress = searchParts.every((part) => fullAddress.includes(part));
+    const matchesFilters =
+      (purpose === '' || item.purpose === purpose) &&
+      (category === '' || item.category === category) &&
+      (propertyType === '' || item.propertyType === propertyType) &&
+      (status === '' || item.constructionType === status) &&
+      (bhkType === '' || item.bhkConfiguration.includes(bhkType));
+    return matchesAddress && matchesFilters;
   });
 
   useEffect(() => {
     setResults(filteredProperties.length);
-  }, [filteredProperties, purpose, category, propertyType, status, bhkType]);
+  }, [filteredProperties]);
 
-  const isPropertiesPage = page_location.pathname === `/properties/${searchString}`;
+  const isPropertiesPage = page_location.pathname.startsWith('/properties');
+
+  const renderBuilderCertifications = (certifications) => {
+    return certifications && certifications !== 'NA' ? (
+      <span className="text-sm md:text-sm font-medium flex justify-center items-center gap-1 text-green-700 ">
+        <FontAwesomeIcon icon={faCheck} className="text-green-700 text-xs md:text-sm" />
+        {certifications}
+      </span>
+    ) : null;
+  };
 
   return (
-    <div className="properties-page">
+    <div className="w-full min-h-screen bg-gray-100 px-2 md:px-6 lg:px-8 font-roboto">
       {showAuth && isPropertiesPage && <Authentication />}
-      {showUser && isPropertiesPage && <div className="user-page"><UserActivity /></div>}
+      {showUser && isPropertiesPage && (
+        <div className="mt-2">
+          <UserActivity />
+        </div>
+      )}
+
+      {/* User Icon - Mobile only */}
+      <div className="flex justify-end items-center mt-4 md:hidden">
+        <button
+          onClick={() => dispatch(handleShowUser(!showUser))}
+          className="p-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white"
+        >
+          <FontAwesomeIcon icon={faUser} className="text-lg" />
+        </button>
+      </div>
 
       <PropertiesNavBar />
       <Filters />
 
-      <div className="properties-container">
-        <div className="properties-section">
-          {results !== null && <h3>{results} results</h3>}
-          {isLoading ? <p>Loading...</p> : error && <p style={{ color: 'red' }}>{error}</p>}
-
-          {filteredProperties.length === 0 ? (
-            <p>No properties available.</p>
+      {/* Main content wrapper - restored original laptop styling */}
+      <div className="max-w-screen-xl mx-auto px-1 md:px-0">
+        <div className="mt-4">
+          {results !== null && (
+            <h3 className="sm:pl-4 text-lg md:text-xl font-semibold">{results} results</h3>
+          )}
+          {isLoading ? (
+            <p className="text-center py-8 text-gray-600 text-base md:text-lg">Loading...</p>
+          ) : error ? (
+            <p className="text-center py-8 text-red-500 text-base md:text-lg">{error}</p>
+          ) : filteredProperties.length === 0 ? (
+            <p className="text-center py-8 text-gray-600 text-base md:text-lg">No properties available.</p>
           ) : (
-            <div className="properties-list">
+            <div className="mt-4 space-y-6">
               {filteredProperties.map((item) => (
-                <div className="property-card" key={item._id}>
-                  <Link to={`/propertyinfo/${item._id}`} key={item._id} className="link">
-                    <div className="property-images">
-                      {item.photos && item.photos.length > 0 ? (
-                        <img
-                          src={`${API_URL}/listings/uploads/${item.photos[0]}`}
-                          alt="Property"
-                          className="property-image"
-                        />
-                      ) : (
-                        <p>No image available</p>
-                      )}
-                    </div>
+                <div
+                  className="bg-white rounded-lg shadow-xs border border-gray-200 p-4 flex flex-col lg:flex-row gap-4 w-full lg:w-[100%] lg:mx-auto"
+                  key={item._id}
+                >
+                  {/* Property Image - better tablet sizing */}
+                  <Link
+                    to={`/propertyinfo/${item._id}`}
+                    className="w-full h-48 lg:w-80 lg:h-80 border border-gray-300 rounded-lg overflow-hidden flex-shrink-0"
+                    style={{ textDecoration: 'none' }}
+                  >
+                    {item.photos?.[0] ? (
+                      <img
+                        src={`${API_URL}/listings/uploads/${item.photos[0]}`}
+                        alt="Property"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-500 text-sm">
+                        No image available
+                      </div>
+                    )}
                   </Link>
 
-                  <div className="property-content">
-                    <div className="save-share">
-                      <FontAwesomeIcon icon={faBookmark} size="xl" style={{ color: '#d9d9d9' }} />
-                      <FontAwesomeIcon icon={faShare} size="xl" style={{ color: '#d9d9d9' }} />
+                  {/* Property Details - better tablet layout */}
+                  <div className="p-1.5 flex-1 flex flex-col justify-between gap-2">
+                    {/* Bookmark and Share Icons */}
+                    <div className="flex justify-end gap-4 text-gray-400 text-lg lg:text-xl">
+                      <FontAwesomeIcon icon={faBookmark} className="cursor-pointer" />
+                      <FontAwesomeIcon icon={faShare} className="cursor-pointer" />
                     </div>
 
-                    <div className="card-header">
-                      <Link to={`/propertyinfo/${item._id}`} className="link">
-                        <h3 style={{ color: '#333333', fontWeight: '700' }}>{item.propertyName}</h3>
+                    {/* Property Name and Certifications */}
+                    <div className="flex flex-col md:flex-row md:justify-between md:items-start lg:flex-row lg:justify-between lg:items-center gap-2">
+                      <Link
+                        to={`/propertyinfo/${item._id}`}
+                        style={{ textDecoration: 'none', color: '#055CB4' }}
+                        className="text-gray-800 hover:text-primary"
+                      >
+                        <h2 className="text-xl lg:text-lg lg:font-bold font-bold text-primary">
+                          {item.propertyName}
+                        </h2>
                       </Link>
                       {renderBuilderCertifications(item.builderCertifications)}
                     </div>
 
-                    <span style={{ color: '#333333' }}>{item.category} / {item.propertyType}</span>
+                    {/* Property Category */}
+                    <span className="text-base md:text-base lg:text-lg text-gray-600">
+                      {item.category} / {item.propertyType}
+                    </span>
 
-                    <div className="property-details">
-                      <div className="price-details detail-item">
-                        <strong style={{ color: '#777777' }}>Price</strong>
-                        <span>{item.expectedPrice ? `₹${item.expectedPrice}` : 'N/A'}</span>
+                    {/* Property Details - improved tablet grid */}
+                    <div className="grid grid-cols-2 md:grid md:grid-cols-4 lg:flex lg:flex-wrap gap-3 md:gap-2 lg:gap-4 pt-2 text-sm lg:text-sm text-gray-600 font-medium lg:font-medium">
+                      <div className="min-w-0">
+                        <p className="text-gray-500 text-xs">Price</p>
+                        <p className="text-sm md:text-sm lg:text-lg font-semibold text-black truncate">
+                          {item.expectedPrice ? `₹${item.expectedPrice}` : 'N/A'}
+                        </p>
                       </div>
-                      <div className="carpet-area detail-item" style={{ borderLeft: '1px solid #777777', paddingLeft: '1%' }}>
-                        <strong style={{ color: '#777777' }}>Carpet-Area</strong>
-                        <span>{item.carpetArea ? `${item.carpetArea} sqft` : 'N/A'}</span>
+                      <div className="min-w-0 lg:border-l lg:pl-4">
+                        <p className="text-gray-500 text-xs">Carpet-Area</p>
+                        <p className="text-sm md:text-sm lg:text-lg font-semibold text-black truncate">
+                          {item.carpetArea ? `${item.carpetArea} sqft` : 'N/A'}
+                        </p>
                       </div>
-                      <div className="configuration detail-item" style={{ borderLeft: '1px solid #777777', paddingLeft: '1%' }}>
-                        <strong style={{ color: '#777777' }}>Configuration</strong>
-                        <span>{item.bhkConfiguration?.length > 0 ? item.bhkConfiguration.join('/') : 'N/A'}</span>
+                      <div className="min-w-0 lg:border-l lg:pl-4">
+                        <p className="text-gray-500 text-xs">Configuration</p>
+                        <p className="text-sm md:text-sm lg:text-lg font-semibold text-black truncate">
+                          {item.bhkConfiguration?.length > 0
+                            ? item.bhkConfiguration.join('/')
+                            : 'N/A'}
+                        </p>
                       </div>
-                      <div className="construction-type detail-item" style={{ borderLeft: '1px solid #777777', paddingLeft: '1%' }}>
-                        <strong style={{ color: '#777777' }}>Property Status</strong>
-                        <span>{item.constructionType || 'N/A'}</span>
+                      <div className="min-w-0 lg:border-l lg:pl-4">
+                        <p className="text-gray-500 text-xs">Property Status</p>
+                        <p className="text-sm md:text-sm lg:text-lg font-semibold text-black truncate">
+                          {item.constructionType || 'N/A'}
+                        </p>
                       </div>
                     </div>
 
-                    {item.description && <p style={{ color: '#777777' }}>{item.description}</p>}
+                    {/* Description */}
+                    {item.description && (
+                      <p className="text-gray-600 text-sm md:text-sm lg:text-lg mt-1 line-clamp-2 lg:line-clamp-3">
+                        {item.description}
+                      </p>
+                    )}
 
-                    <div className="builder-info">
-                      <span>{item.builderCompany || 'No Builder Info'}</span>
+                    {/* Builder Info and Action Buttons */}
+                    <div className="relative flex flex-col md:flex-row md:justify-between md:items-center lg:flex-row lg:justify-between lg:items-center mt-3 gap-3">
+                      <span className="text-base md:text-base lg:text-lg font-bold text-gray-800 truncate">
+                        {item.builderCompany || 'No Builder Info'}
+                      </span>
 
-                      <div className="contact-buttons">
+                      <div className="relative flex flex-col md:flex-row lg:flex-row gap-2 md:gap-2 lg:gap-3 w-full md:w-auto lg:w-auto">
                         <button
-                          style={{ backgroundColor: '#ebf4fc', color: '#055CB4' }}
+                          className="text-xs md:text-xs lg:text-sm px-3 md:px-3 lg:px-4 py-2 text-blue-600 bg-blue-50 font-semibold rounded hover:bg-blue-100 transition flex-1 md:flex-none"
                           onClick={(e) => {
-                            e.stopPropagation();
                             e.preventDefault();
                             setShowphoneId(item._id);
                           }}
                         >
-                          <b>View Phone</b>
+                          View Phone
                         </button>
 
                         {showphoneId === item._id && (
-                          <div className="phone-section">
+                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-10 border border-gray-300 bg-white p-3 rounded shadow w-64 md:w-52 lg:w-56">
                             <FontAwesomeIcon
                               icon={faXmark}
-                              size="xl"
-                              style={{ color: '#a6a6a6' }}
+                              className="absolute top-1 right-2 text-gray-400 cursor-pointer"
                               onClick={(e) => {
-                                e.stopPropagation();
                                 e.preventDefault();
                                 setShowphoneId(null);
                               }}
                             />
-                            <h3>Phone number</h3>
-                            <p>{item.listerPhoneNumber}</p>
+                            <h5 className="text-gray-700 font-semibold text-sm mb-1">
+                              Phone number
+                            </h5>
+                            <p className="text-black text-base md:text-base lg:text-lg">
+                              {String(item.listerPhoneNumber).slice(2)}
+                            </p>
                           </div>
                         )}
 
                         <button
+                          className="py-2 px-3 md:px-3 lg:px-4 bg-primary text-white font-semibold rounded hover:bg-primary transition text-xs md:text-xs lg:text-sm flex-1 md:flex-none"
                           onClick={(e) => {
-                            e.stopPropagation();
                             e.preventDefault();
-                            // Add contact logic
+                            // Add contact functionality here
                           }}
                         >
-                          <FontAwesomeIcon icon={faPhone} size="sm" style={{ color: 'white' }} /> <b>Contact</b>
+                          <FontAwesomeIcon icon={faPhone} className="mr-1 md:mr-1 lg:mr-2" /> Contact
                         </button>
                       </div>
                     </div>

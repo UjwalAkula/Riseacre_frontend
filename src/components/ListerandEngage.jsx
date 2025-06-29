@@ -1,55 +1,76 @@
 import React from 'react';
-import './PropertyStyle.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBus,faHome,faShieldAlt,faCircleExclamation} from '@fortawesome/free-solid-svg-icons';
+import {
+  faBus,
+  faHome,
+  faShieldAlt,
+  faCircleExclamation,
+} from '@fortawesome/free-solid-svg-icons';
 
 const ListerandEngage = ({ property }) => {
-  // Masking phone number partially for privacy
   const maskedPhone = property.listerPhoneNumber
     ? property.listerPhoneNumber.toString().replace(/(\d{4})(\d{4})(\d{4})/, '$1XXXXXX$3')
     : 'N/A';
 
   return (
     <>
-    <div className="Lister-engagement">
-      <div className="lister-details">
-        <div className="lister-item">
-          <strong>Lister Type :</strong> {property.listerType || 'N/A'}
-        </div>
-        <div className="lister-item">
-          <strong>Name :</strong> {property.listerName || 'N/A'}
-        </div>
-        <div className="lister-item">
-          <strong>Phone Number :</strong> {maskedPhone || 'N/A'}
-        </div>
-        {property.builderCompany && (
-          <div className="lister-item">
-            <strong>Builder Company :</strong> {property.builderCompany}
+      {/* Lister Details */}
+      <div className="p-3 sm:p-6 bg-white rounded-md shadow mb-4 sm:mb-6">
+        <div className="space-y-2 sm:space-y-2 text-gray-700 text-sm sm:text-base font-medium">
+          <div className="flex flex-col sm:flex-row sm:items-center">
+            <strong className="text-gray-800 text-sm sm:text-base min-w-0 sm:min-w-[140px]">
+              Lister Type :
+            </strong> 
+            <span className="mt-1 sm:mt-0 sm:ml-2">{property.listerType || 'N/A'}</span>
           </div>
-        )}
+          <div className="flex flex-col sm:flex-row sm:items-center">
+            <strong className="text-gray-800 text-sm sm:text-base min-w-0 sm:min-w-[140px]">
+              Name :
+            </strong> 
+            <span className="mt-1 sm:mt-0 sm:ml-2">{property.listerName || 'N/A'}</span>
+          </div>
+          <div className="flex flex-col sm:flex-row sm:items-center">
+            <strong className="text-gray-800 text-sm sm:text-base min-w-0 sm:min-w-[140px]">
+              Phone Number :
+            </strong> 
+            <span className="mt-1 sm:mt-0 sm:ml-2">{maskedPhone}</span>
+          </div>
+          {property.builderCompany && (
+            <div className="flex flex-col sm:flex-row sm:items-center">
+              <strong className="text-gray-800 text-sm sm:text-base min-w-0 sm:min-w-[140px]">
+                Builder Company :
+              </strong> 
+              <span className="mt-1 sm:mt-0 sm:ml-2">{property.builderCompany}</span>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
-    <div className="rating-section">
-    <h3>Ratings based on features <FontAwesomeIcon icon={faCircleExclamation} size="sm" style={{color: "#919191",}} /></h3>
-    <div className="rating-icons">
-      <div className="rating">
-        <span className='rate-icon'><FontAwesomeIcon icon={faBus} size="2xl" style={{ color: "#055CB4" }} /></span>
-        <span className='rate-value'>{property.connectivityRating}/5</span>
-        <span>Connectivity</span>
+
+      {/* Ratings Section */}
+      <div className="bg-white rounded-md shadow p-3 sm:p-6">
+        <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-3 sm:mb-4 flex items-center gap-2 flex-wrap">
+          <span>Ratings based on features</span>
+          <FontAwesomeIcon icon={faCircleExclamation} className="text-gray-400 text-sm" />
+        </h3>
+        <div className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-4">
+          {[
+            { icon: faBus, label: 'Connectivity', rating: property.connectivityRating },
+            { icon: faHome, label: 'Livability', rating: property.livabilityRating },
+            { icon: faShieldAlt, label: 'Safety', rating: property.safetyRating },
+          ].map(({ icon, label, rating }) => (
+            <div key={label} className="flex items-center sm:flex-col sm:items-center space-x-3 sm:space-x-0 sm:space-y-2 flex-1 p-2 sm:p-0">
+              <div className="p-2 sm:p-3 rounded-full border border-gray-300 flex-shrink-0">
+                <FontAwesomeIcon icon={icon} className="text-blue-600 text-lg sm:text-2xl" />
+              </div>
+              <div className="flex flex-col sm:items-center">
+                <div className="text-base sm:text-lg font-semibold text-gray-800">{rating}/5</div>
+                <div className="text-xs sm:text-sm text-gray-600">{label}</div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-      <div className="rating">
-        <span className='rate-icon'><FontAwesomeIcon icon={faHome} size="2xl" style={{ color: "#055CB4" }} /></span>
-        <span className='rate-value'>{property.livabilityRating}/5</span>
-        <span>Livability</span>
-      </div>
-      <div className="rating">
-        <span className='rate-icon'><FontAwesomeIcon icon={faShieldAlt} size="2xl" style={{ color: "#055CB4" }} /></span>
-        <span className='rate-value'>{property.safetyRating}/5</span>
-        <span>Safety</span>
-      </div>
-    </div>
-  </div>
-  </>
+    </>
   );
 };
 
