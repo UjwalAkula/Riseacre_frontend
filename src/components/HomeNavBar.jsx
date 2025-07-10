@@ -98,9 +98,9 @@ const HomeNavBar = () => {
   ];
 
   return (
-    <div className="w-full min-h-[55vh] bg-gradient-to-b from-blue-50 to-white">
+    <div className="w-full min-h-[55vh] bg-gradient-to-b from-blue-50 to-white relative">
       {/* Header */}
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-5 flex justify-between items-center bg-white shadow-sm">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-5 flex justify-between items-center bg-white shadow-sm z-50 fixed top-0 left-0 right-0">
         <div className="text-blue-600 font-semibold text-xl sm:text-2xl lg:text-3xl">
           Riseacre<span className="text-gray-500 text-base sm:text-lg lg:text-xl">.in</span>
         </div>
@@ -123,7 +123,7 @@ const HomeNavBar = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex flex-col items-center px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <div className="flex flex-col items-center px-4 sm:px-6 lg:px-8 py-8 sm:py-12 mt-18">
         {/* Title Section */}
         <div className="text-center mb-8 sm:mb-10">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-3">

@@ -12,7 +12,7 @@ const PropertiesNavBar = () => {
   const isPostPropertyPage = location.pathname === '/postProperty';
 
   return (
-    <div className="w-full h-16 sm:h-18 md:h-20 px-3 sm:px-4 md:px-8 flex items-center justify-between bg-blue-600 fixed top-0 left-0 z-50">
+    <div className="w-full h-16 sm:h-18 md:h-20 px-3 sm:px-4 md:px-8 flex items-center justify-between bg-blue-700 fixed top-0 left-0 z-50">
       {/* Logo */}
       <div className="text-white text-2xl sm:text-xl md:text-2xl lg:text-3xl font-medium font-ubuntu">
         Riseacre<span className="text-xs sm:text-sm md:text-base lg:text-xl">.in</span>
