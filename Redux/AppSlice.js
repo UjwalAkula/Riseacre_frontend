@@ -49,10 +49,13 @@ export const AppSlice = createSlice({
       }
     },
 
-    handleSignOut:(state)=>{
-      state.loggedIn=false;
-      localStorage.clear();
-      window.location.href = '/'
+    handleSignOut: (state, action) => {
+      const confirmLogout = window.confirm("Are you sure you want to sign out?");
+      if (confirmLogout) {
+        state.loggedIn = false;
+        localStorage.clear();
+        window.location.href = '/';
+      }
     }
   }
 });
