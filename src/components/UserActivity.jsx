@@ -187,7 +187,13 @@ const UserActivity = () => {
           ) : (
             <button
               className="w-full flex items-center justify-center gap-3 p-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl shadow-lg hover:from-red-600 hover:to-red-700 transition-all duration-200 transform hover:scale-[1.02]"
-              onClick={() => dispatch(handleSignOut())}
+              onClick={() => {
+                const result = window.confirm("Are you sure you want to sign out?");
+                if (result) {
+                  dispatch(handleSignOut());
+                  window.location.href = "/";
+                }
+              }}
             >
               <FontAwesomeIcon icon={faCircleLeft} className="text-lg" />
               <span className="font-semibold">Sign Out</span>
