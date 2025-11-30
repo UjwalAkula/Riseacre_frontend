@@ -18,34 +18,131 @@ import { handleShowUser } from '../../Redux/AppSlice';
 import UserActivity from './UserActivity';
 import Authentication from './Authentication';
 
+/* ======================================================
+   STATE ABBREVIATION MAP (ONLY STATES)
+====================================================== */
+const STATE_ABBREVIATION_MAP = {
+  'ap': 'andhra pradesh',
+  'ar': 'arunachal pradesh',
+  'as': 'assam',
+  'br': 'bihar',
+  'cg': 'chhattisgarh',
+  'ch': 'chandigarh',
+  'ct': 'chhattisgarh',
+  'dd': 'daman and diu',
+  'dl': 'delhi',
+  'dn': 'dadra and nagar haveli',
+  'ga': 'goa',
+  'gj': 'gujarat',
+  'hr': 'haryana',
+  'hp': 'himachal pradesh',
+  'jk': 'jammu and kashmir',
+  'jh': 'jharkhand',
+  'ka': 'karnataka',
+  'kl': 'kerala',
+  'la': 'ladakh',
+  'ld': 'lakshadweep',
+  'mh': 'maharashtra',
+  'ml': 'meghalaya',
+  'mn': 'manipur',
+  'mp': 'madhya pradesh',
+  'mz': 'mizoram',
+  'nl': 'nagaland',
+  'or': 'odisha',
+  'ol': 'odisha',
+  'pb': 'punjab',
+  'py': 'puducherry',
+  'rj': 'rajasthan',
+  'sk': 'sikkim',
+  'tg': 'telangana',
+  'tr': 'tripura',
+  'up': 'uttar pradesh',
+  'ut': 'uttarakhand',
+  'wb': 'west bengal'
+};
+
+/* ======================================================
+   NORMALIZE ONLY STATE ABBREVIATIONS IN SEARCH
+   Example: "mumbai,mh,india" → "mumbai,maharashtra,india"
+====================================================== */
+const normalizeOnlyStates = (searchString) => {
+  if (!searchString) return searchString;
+  
+  let normalized = searchString.toLowerCase();
+  
+  // Only replace state abbreviations
+  Object.entries(STATE_ABBREVIATION_MAP).forEach(([abbr, fullName]) => {
+    // Replace as whole word (surrounded by commas or at boundaries)
+    normalized = normalized.replace(new RegExp(`\\b${abbr}\\b`, 'g'), fullName);
+  });
+  
+  return normalized;
+};
+
+/* ======================================================
+   SMART SIMILARITY MATCH (LEVENSHTEIN DISTANCE)
+====================================================== */
+function similarity(a, b) {
+  if (!a || !b) return 0;
+  a = a.toLowerCase();
+  b = b.toLowerCase();
+
+  const longer = a.length > b.length ? a : b;
+  const shorter = a.length > b.length ? b : a;
+
+  const longerLength = longer.length;
+  if (longerLength === 0) return 1.0;
+
+  let costs = [];
+  for (let i = 0; i <= shorter.length; i++) {
+    let lastValue = i;
+    for (let j = 0; j <= longer.length; j++) {
+      if (i === 0) {
+        costs[j] = j;
+      } else if (j > 0) {
+        let newValue = costs[j - 1];
+        if (shorter[i - 1] !== longer[j - 1]) {
+          newValue = Math.min(newValue, lastValue, costs[j]) + 1;
+        }
+        costs[j - 1] = lastValue;
+        lastValue = newValue;
+      }
+    }
+    if (i > 0) costs[longer.length] = lastValue;
+  }
+
+  return (longerLength - costs[longer.length]) / longerLength;
+}
+
+/* ======================================================
+   MAIN COMPONENT
+====================================================== */
 const Properties = () => {
   const dispatch = useDispatch();
   const page_location = useLocation();
 
   const { searchString } = useSelector((state) => state.search);
   const { showUser, showAuth } = useSelector((state) => state.app);
-  const {
-    purpose,
-    category,
-    propertyType,
-    status,
-    bhkType,
-  } = useSelector((state) => state.filters);
+  const { purpose, category, propertyType, status, bhkType } = useSelector(
+    (state) => state.filters
+  );
 
   const [properties, setProperties] = useState([]);
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchInput, setSearchInput] = useState(searchString);
+  const [searchInput, setSearchInput] = useState(searchString || '');
   const [showphoneId, setShowphoneId] = useState(null);
 
+  /* Sync search string with global store */
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       dispatch(setSearchString(searchInput));
-    }, 500);
+    }, 300);
     return () => clearTimeout(timeoutId);
   }, [searchInput, dispatch]);
 
+  /* Fetch Properties */
   const getProperties = async () => {
     try {
       const response = await fetch(`${API_URL}/listings/get-all-properties`);
@@ -55,7 +152,7 @@ const Properties = () => {
       } else {
         setError('Something went wrong while fetching properties');
       }
-    } catch (error) {
+    } catch {
       setError('Failed to fetch properties.');
     } finally {
       setIsLoading(false);
@@ -66,16 +163,49 @@ const Properties = () => {
     getProperties();
   }, []);
 
+  /* ======================================================
+     FILTER WITH STATE ABBREVIATION NORMALIZATION ONLY
+  ====================================================== */
   const filteredProperties = properties.filter((item) => {
-    const fullAddress = `${item.nearbyLandmarks}, ${item.locality}, ${item.city}, ${item.state}, India`.toLowerCase();
-    const searchParts = searchInput.split(',').map((part) => part.trim().toLowerCase());
-    const matchesAddress = searchParts.every((part) => fullAddress.includes(part));
+    // Build full address from database
+    const fullAddress = `${item.nearbyLandmarks}, ${item.locality}, ${item.city}, ${item.state}, India`
+      .toLowerCase();
+
+    // Split address into tokens
+    const addressTokens = fullAddress
+      .replace(/,/g, ' ')
+      .split(' ')
+      .filter(Boolean);
+
+    // ✅ ONLY normalize state abbreviations (e.g., "mh" → "maharashtra")
+    // Keep everything else as-is (e.g., "mumbai" stays "mumbai")
+    const normalizedInput = normalizeOnlyStates(searchInput);
+
+    // Split normalized search into parts
+    const searchParts = (normalizedInput || '')
+      .toLowerCase()
+      .split(',')
+      .map((p) => p.trim())
+      .filter(Boolean);
+
+    // Check if every search part matches at least one address token
+    const matchesAddress = searchParts.every((searchPart) =>
+      addressTokens.some(
+        (token) =>
+          token.includes(searchPart) ||      // substring match
+          searchPart.includes(token) ||      // reverse substring
+          similarity(token, searchPart) > 0.6 // fuzzy match
+      )
+    );
+
+    // Apply filter constraints
     const matchesFilters =
       (purpose === '' || item.purpose === purpose) &&
       (category === '' || item.category === category) &&
       (propertyType === '' || item.propertyType === propertyType) &&
       (status === '' || item.constructionType === status) &&
       (bhkType === '' || item.bhkConfiguration.includes(bhkType));
+
     return matchesAddress && matchesFilters;
   });
 
@@ -103,7 +233,7 @@ const Properties = () => {
         </div>
       )}
 
-      {/* User Icon - Mobile only */}
+      {/* Mobile user icon */}
       <div className="flex justify-end items-center mt-4 md:hidden">
         <button
           onClick={() => dispatch(handleShowUser(!showUser))}
@@ -116,117 +246,113 @@ const Properties = () => {
       <PropertiesNavBar />
       <Filters />
 
-      {/* Main content wrapper - restored original laptop styling */}
+      {/* Main content */}
       <div className="max-w-screen-xl mx-auto px-1 md:px-0">
         <div className="mt-4">
           {results !== null && (
-            <h3 className="sm:pl-4 text-lg md:text-xl font-semibold">{results} results</h3>
+            <h3 className="sm:pl-4 text-lg md:text-xl font-semibold">
+              {results} results
+            </h3>
           )}
+
           {isLoading ? (
             <p className="text-center py-8 text-gray-600 text-base md:text-lg">Loading...</p>
           ) : error ? (
             <p className="text-center py-8 text-red-500 text-base md:text-lg">{error}</p>
           ) : filteredProperties.length === 0 ? (
-            <p className="text-center py-8 text-gray-600 text-base md:text-lg">No properties available.</p>
+            <p className="text-center py-8 text-gray-600 text-base md:text-lg">
+              No properties available.
+            </p>
           ) : (
             <div className="mt-4 space-y-6">
               {filteredProperties.map((item) => (
                 <div
-                  className="bg-white rounded-lg shadow-xs border border-gray-200 p-4 flex flex-col lg:flex-row gap-4 w-full lg:w-[100%] lg:mx-auto"
+                  className="bg-white rounded-lg shadow-xs border border-gray-200 p-4 flex flex-col lg:flex-row gap-4"
                   key={item._id}
                 >
-                  {/* Property Image - better tablet sizing */}
                   <Link
                     to={`/propertyinfo/${item._id}`}
-                    className="w-full h-48 lg:w-80 lg:h-80 border border-gray-300 rounded-lg overflow-hidden flex-shrink-0"
-                    style={{ textDecoration: 'none' }}
+                    className="w-full h-48 lg:w-80 lg:h-80 border border-gray-300 rounded-lg overflow-hidden"
                   >
                     {item.photos?.[0] ? (
                       <img
                         src={`${API_URL}/listings/uploads/${item.photos[0]}`}
-                        alt="Property"
                         className="w-full h-full object-cover"
+                        alt="Property"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-500 text-sm">
+                      <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-500">
                         No image available
                       </div>
                     )}
                   </Link>
 
-                  {/* Property Details - better tablet layout */}
-                  <div className="p-1.5 flex-1 flex flex-col justify-between gap-2">
-                    {/* Bookmark and Share Icons */}
-                    <div className="flex justify-end gap-4 text-gray-400 text-lg lg:text-xl">
-                      <FontAwesomeIcon icon={faBookmark} className="cursor-pointer" />
-                      <FontAwesomeIcon icon={faShare} className="cursor-pointer" />
+                  <div className="p-1.5 flex-1 flex flex-col justify-between">
+                    <div className="flex justify-end gap-4 text-gray-400 text-lg">
+                      <FontAwesomeIcon icon={faBookmark} />
+                      <FontAwesomeIcon icon={faShare} />
                     </div>
 
-                    {/* Property Name and Certifications */}
-                    <div className="flex flex-col md:flex-row md:justify-between md:items-start lg:flex-row lg:justify-between lg:items-center gap-2">
+                    <div className="flex flex-col md:flex-row justify-between items-start gap-2">
                       <Link
                         to={`/propertyinfo/${item._id}`}
-                        style={{ textDecoration: 'none', color: '#055CB4' }}
-                        className="text-gray-800 hover:text-primary"
+                        className="text-primary"
+                        style={{ textDecoration: 'none' }}
                       >
-                        <h2 className="text-xl lg:text-lg lg:font-bold font-bold text-primary">
-                          {item.propertyName}
-                        </h2>
+                        <h2 className="text-xl font-bold">{item.propertyName}</h2>
                       </Link>
+
                       {renderBuilderCertifications(item.builderCertifications)}
                     </div>
 
-                    {/* Property Category */}
-                    <span className="text-base md:text-base lg:text-lg text-gray-600">
+                    <span className="text-base text-gray-600">
                       {item.category} / {item.propertyType}
                     </span>
 
-                    {/* Property Details - improved tablet grid */}
-                    <div className="grid grid-cols-2 md:grid md:grid-cols-4 lg:flex lg:flex-wrap gap-3 md:gap-2 lg:gap-4 pt-2 text-sm lg:text-sm text-gray-600 font-medium lg:font-medium">
-                      <div className="min-w-0">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm pt-2">
+                      <div>
                         <p className="text-gray-500 text-xs">Price</p>
-                        <p className="text-sm md:text-sm lg:text-lg font-semibold text-black truncate">
+                        <p className="font-semibold">
                           {item.expectedPrice ? `₹${item.expectedPrice}` : 'N/A'}
                         </p>
                       </div>
-                      <div className="min-w-0 lg:border-l lg:pl-4">
-                        <p className="text-gray-500 text-xs">Carpet-Area</p>
-                        <p className="text-sm md:text-sm lg:text-lg font-semibold text-black truncate">
+
+                      <div>
+                        <p className="text-gray-500 text-xs">Carpet Area</p>
+                        <p className="font-semibold">
                           {item.carpetArea ? `${item.carpetArea} sqft` : 'N/A'}
                         </p>
                       </div>
-                      <div className="min-w-0 lg:border-l lg:pl-4">
+
+                      <div>
                         <p className="text-gray-500 text-xs">Configuration</p>
-                        <p className="text-sm md:text-sm lg:text-lg font-semibold text-black truncate">
-                          {item.bhkConfiguration?.length > 0
+                        <p className="font-semibold">
+                          {item.bhkConfiguration?.length
                             ? item.bhkConfiguration.join('/')
                             : 'N/A'}
                         </p>
                       </div>
-                      <div className="min-w-0 lg:border-l lg:pl-4">
-                        <p className="text-gray-500 text-xs">Property Status</p>
-                        <p className="text-sm md:text-sm lg:text-lg font-semibold text-black truncate">
-                          {item.constructionType || 'N/A'}
-                        </p>
+
+                      <div>
+                        <p className="text-gray-500 text-xs">Status</p>
+                        <p className="font-semibold">{item.constructionType || 'N/A'}</p>
                       </div>
                     </div>
 
-                    {/* Description */}
                     {item.description && (
-                      <p className="text-gray-600 text-sm md:text-sm lg:text-lg mt-1 line-clamp-2 lg:line-clamp-3">
+                      <p className="text-gray-600 text-sm mt-1 line-clamp-2">
                         {item.description}
                       </p>
                     )}
 
-                    {/* Builder Info and Action Buttons */}
-                    <div className="relative flex flex-col md:flex-row md:justify-between md:items-center lg:flex-row lg:justify-between lg:items-center mt-3 gap-3">
-                      <span className="text-base md:text-base lg:text-lg font-bold text-gray-800 truncate">
+                    <div className="flex justify-between items-center mt-3">
+                      <span className="font-bold text-gray-800">
                         {item.builderCompany || 'No Builder Info'}
                       </span>
 
-                      <div className="relative flex flex-col md:flex-row lg:flex-row gap-2 md:gap-2 lg:gap-3 w-full md:w-auto lg:w-auto">
+                      <div className="flex gap-3">
                         <button
-                          className="text-xs md:text-xs lg:text-sm px-3 md:px-3 lg:px-4 py-2 text-blue-600 bg-blue-50 font-semibold rounded hover:bg-blue-100 transition flex-1 md:flex-none"
+                          className="px-3 py-2 text-blue-600 bg-blue-50 rounded"
                           onClick={(e) => {
                             e.preventDefault();
                             setShowphoneId(item._id);
@@ -236,7 +362,7 @@ const Properties = () => {
                         </button>
 
                         {showphoneId === item._id && (
-                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-10 border border-gray-300 bg-white p-3 rounded shadow w-64 md:w-52 lg:w-56">
+                          <div className="absolute bg-white p-3 border rounded shadow w-64">
                             <FontAwesomeIcon
                               icon={faXmark}
                               className="absolute top-1 right-2 text-gray-400 cursor-pointer"
@@ -245,23 +371,14 @@ const Properties = () => {
                                 setShowphoneId(null);
                               }}
                             />
-                            <h5 className="text-gray-700 font-semibold text-sm mb-1">
-                              Phone number
-                            </h5>
-                            <p className="text-black text-base md:text-base lg:text-lg">
-                              {String(item.listerPhoneNumber).slice(2)}
-                            </p>
+                            <h5 className="font-semibold mb-1 text-gray-700">Phone number</h5>
+                            <p className="text-black">{String(item.listerPhoneNumber).slice(2)}</p>
                           </div>
                         )}
 
-                        <button
-                          className="py-2 px-3 md:px-3 lg:px-4 bg-primary text-white font-semibold rounded hover:bg-primary transition text-xs md:text-xs lg:text-sm flex-1 md:flex-none"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            // Add contact functionality here
-                          }}
-                        >
-                          <FontAwesomeIcon icon={faPhone} className="mr-1 md:mr-1 lg:mr-2" /> Contact
+                        <button className="px-4 py-2 bg-primary text-white rounded">
+                          <FontAwesomeIcon icon={faPhone} className="mr-2" />
+                          Contact
                         </button>
                       </div>
                     </div>

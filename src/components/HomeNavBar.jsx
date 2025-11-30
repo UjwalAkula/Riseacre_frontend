@@ -164,7 +164,7 @@ const HomeNavBar = () => {
                 <input
                   ref={inputRef}
                   type="text"
-                  value={searchString}
+                  value={searchString || ""}
                   onChange={handleInputChange}
                   onFocus={handleInputFocus}
                   placeholder="Search by location (Eg : HYDERABAD, MUMBAI)"
